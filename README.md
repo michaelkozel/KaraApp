@@ -1,4 +1,5 @@
 
+# Karaoketexty app
 Aplikace k uložení textů písniček ze serveru http://karaoketexty.cz Aplikace zobrazuje hitparádu a umožňuje také nahrávání.
 
 Screenshoty:

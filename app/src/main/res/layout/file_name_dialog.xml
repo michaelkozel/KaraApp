@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+
+	android:id="@+id/filenamedialog"
+
+    android:measureWithLargestChild="false"
+    android:theme="@style/Base.Theme.AppCompat.Dialog"
+    android:layout_gravity="center">
+
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+android:id="@+id/tvname"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="File Name : " />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <EditText
+            android:id="@+id/createFileName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:maxLength="100"
+            android:hint="myRecord                                 "
+            android:layout_gravity="center_horizontal" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/okButtonDialog"
+            android:text="Ok"
+            android:background="#282828"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelButtonDialog"
+            android:text="Cancel"
+            android:background="#282828"
+            android:layout_gravity="right"
+            android:layout_column="1" />
+    </TableRow>
+
+</TableLayout>

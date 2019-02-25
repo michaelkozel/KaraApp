@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
     public Bitmap[] Thumbnails;
     CustomSwipeAdapter adapter;
     ArrayList<String> links;
-    ArrayList<String> linksOnThumbnails;
     Boolean prazdnypole = false;
     //Recording
     Button play, record, stop;
@@ -884,24 +883,23 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
         }
 
         public void loadImages() {
-            linksOnThumbnails = new ArrayList<String>();
             Thumbnails = new Bitmap[links.size()];
-            Log.d(TAG,"Loading images");
+            Log.d(TAG, "Loading images");
             for (int i = 0; i < links.size(); i++) {
-                Log.d(TAG,"Loading images loop "+i);
-              Log.d(TAG,"parsuji: " + links.get(i));
+                Log.d(TAG, "Loading images loop " + i);
+                Log.d(TAG, "parsuji: " + links.get(i));
                 String code = getSource(links.get(i));
                 String value = "video_andomenu_cont";
                 String startText = "idvid=";
                 String finalUrl;
                 try {
                     int start = code.indexOf(value);
-                    int end = code.indexOf("&",start);
-                    String subOne = code.substring(start,end);
+                    int end = code.indexOf("&", start);
+                    String subOne = code.substring(start, end);
                     start = subOne.indexOf(startText);
-                    String imageID = subOne.substring(start+startText.length(),subOne.length());
-                    finalUrl = "https://i.ytimg.com/vi/" + imageID + "/mqdefault.jpg";
-                    Log.d(TAG,"url image "+finalUrl);
+                    String imageID = subOne.substring(start + startText.length(), subOne.length());
+                    finalUrl = "https://i.ytimg.com/vi/" + imageID + "/sddefault.jpg";
+                    Log.d(TAG, "url image " + finalUrl);
                     URL url = new URL(finalUrl);
                     URLConnection urlConnection = url.openConnection();
                     urlConnection.connect();
@@ -917,9 +915,7 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                finally {
-
+                } finally {
                 }
 
 

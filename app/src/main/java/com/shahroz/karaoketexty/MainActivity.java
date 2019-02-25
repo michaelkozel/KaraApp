@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
     Dialog fileDialog;
     EditText et_filename;
     EditText edit_filename;
-    static String[] textySongu;
+    String[] textySongu;
+    final String TAG = getClass().getName().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,11 +235,8 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
             @Override
             public void onClick(View v) {
                 //  Toast.makeText(MainActivity.this, "Recording Starting...", Toast.LENGTH_SHORT).show();
-
                 createAndShowFileDialog();
                 fileDialog.show();
-
-
                 //  Toast.makeText(MainActivity.this, "Zahajuji nahrávání...", Toast.LENGTH_SHORT).show();
             }
 
@@ -252,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
                     audioRecord.release();
                     audioRecord = null;
                 }
-
                 //zastavení stopek
                 chronometer.stop();
                 //textview
@@ -267,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
                 }
                 play.setEnabled(true);
                 record.setEnabled(true);
-                //      Toast.makeText(MainActivity.this, "Úspěšně nahráno", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -277,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 String item = (String) listSaved.getAdapter().getItem(position);
-                //  Toast.makeText(getApplicationContext(), item, Toast.LENGTH_SHORT).show();
                 uop = new UserOperations(getApplicationContext());
 
                 int count = 0;
@@ -315,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
                         startActivity(a);
                         break;
                     }
-                    //tady to postupně vkládej do listview, jinak se bude pokaždé tohle všechno přeukládat a zůstane ti tam jen poslední song
 
 
                 }
@@ -384,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
         tb.setTitle("");
         tb.setBackgroundResource(R.drawable.logo);
         setSupportActionBar(tb);
-
         Log.d("TABHOST", "2");
         WinManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         sv = new MaterialSearchView(this);
@@ -412,8 +405,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
 
 
     public void prehrat() {
-
-
         try {
             File sdCard = Environment.getExternalStorageDirectory();
             File dir = new File(sdCard.getAbsolutePath() + "/KaraokeTexty");
@@ -596,12 +587,9 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
     }
 
     private void openUrl(String url) {
-
-
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
-
     }
 
     @Override
@@ -611,17 +599,14 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
             case R.id.action_Officialwebsite:
                 openUrl("http://www.karaoketexty.cz");
                 break;
-            case R.id.action_Exit:
-                finish();
-                break;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
     protected void onDestroy() {
-
+        super.onDestroy();
         MainActivity.listSaved = null;
 
     }
@@ -766,7 +751,6 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
     }
 
     class Hitparade extends AsyncTask<Void, Void, Boolean> {
-        public String[] texty = new String[13];
         public String[] nazvy = new String[13];
 
 
@@ -899,40 +883,33 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
             Log.d("INTERNET", "4");
         }
 
-
         public void loadImages() {
             linksOnThumbnails = new ArrayList<String>();
             Thumbnails = new Bitmap[links.size()];
-            System.out.println("LoadingImages ");
+            Log.d(TAG,"Loading images");
             for (int i = 0; i < links.size(); i++) {
-                System.out.println("jedu cyklus image");
-                Document doc = Jsoup.parse(links.get(i));
-                System.out.println("parsuji: " + links.get(i));
+                Log.d(TAG,"Loading images loop "+i);
+              Log.d(TAG,"parsuji: " + links.get(i));
                 String code = getSource(links.get(i));
-                String value = " id =\"tiscali-video\" ";
-                int start = code.indexOf("id=\"tiscali-video\"");
-                int end = code.indexOf(">", start);
-                String urlObrazku = code.substring(start, end);
-                start = urlObrazku.indexOf("data-youtube=\"");
-
-                end = urlObrazku.indexOf("\"", start);
-                urlObrazku = urlObrazku.substring(start + 14, end + 12);
-                System.out.println("data-youtube=\"" + " " + start + " " + end);
-                urlObrazku = "https://i.ytimg.com/vi/" + urlObrazku + "/mqdefault.jpg";
-                System.out.println(urlObrazku);
-                int file_length = 0;
+                String value = "video_andomenu_cont";
+                String startText = "idvid=";
+                String finalUrl;
                 try {
-                    URL url = new URL(urlObrazku);
+                    int start = code.indexOf(value);
+                    int end = code.indexOf("&",start);
+                    String subOne = code.substring(start,end);
+                    start = subOne.indexOf(startText);
+                    String imageID = subOne.substring(start+startText.length(),subOne.length());
+                    finalUrl = "https://i.ytimg.com/vi/" + imageID + "/mqdefault.jpg";
+                    Log.d(TAG,"url image "+finalUrl);
+                    URL url = new URL(finalUrl);
                     URLConnection urlConnection = url.openConnection();
                     urlConnection.connect();
-
-
                     InputStream is = url.openStream();
                     Bitmap bmp = BitmapFactory.decodeStream(is);
-
                     Thumbnails[i] = bmp;
-
-
+                } catch (StringIndexOutOfBoundsException e) {
+                    Log.d("exception", "StringIndexOutOfBoundsException");
                 } catch (java.io.FileNotFoundException r) {
                     Log.d("exception", "filenotfound");
                     r.printStackTrace();
@@ -940,6 +917,9 @@ public class MainActivity extends AppCompatActivity implements onSimpleSearchAct
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                finally {
+
                 }
 
 

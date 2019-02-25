@@ -11,9 +11,4 @@
         android:id="@+id/action_Officialwebsite"
         android:title="Official website" />
 
-
-    <item
-        android:id="@+id/action_Exit"
-        android:title="Exit" />
-
 </menu>
